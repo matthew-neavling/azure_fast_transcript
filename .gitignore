@@ -3,3 +3,4 @@
 *.whl
 *.tar.gz
 *.pyc
+.vscode/
