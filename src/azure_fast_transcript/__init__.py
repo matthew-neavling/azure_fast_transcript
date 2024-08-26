@@ -24,9 +24,13 @@ class Phrase(TypedDict):
     locale:str
     confidence:float
 
+class Channel(TypedDict):
+    channel:int
+    text:str
+
 class FastTranscript(TypedDict):
     duration:int
-    combinedPhrases:list[object]
+    combinedPhrases:list[Channel]
     phrases:list[Phrase]
 
 class CaptionLine(TypedDict):
@@ -46,7 +50,7 @@ class Transcript:
         self.file = file
         self.transcript = {}
 
-    def get_transcript(self)->dict:
+    def get_transcript(self)->FastTranscript:
             """POST file to endpoint
             :returns: 
             """
@@ -110,7 +114,7 @@ class Transcript:
 
 
 
-    def parse_response(self, response:FastTranscript)->str:
+    def parse_subtitles(self, response:FastTranscript)->str:
         enumerator = 1
 
         vtt = "WEBVTT"
@@ -133,15 +137,28 @@ class Transcript:
                     break
         
         return vtt
+    
+    def parse_transcript(self, response:FastTranscript)->str:
+        channels = response["combinedPhrases"]
+        if len(channels) > 1:
+            # handle multiple speakers
+            return "\n".join(t["text"] for t in channels)
+        else:
+            return channels[0]["text"]
 
     @staticmethod
     def get_subtitles(file, endpoint:str=DEFAULT_ENDPOINT)->str:
         transcript = Transcript(file=file, endpoint=endpoint)
         response = transcript.get_transcript()
-        subtitles = transcript.parse_response(response)
+        subtitles = transcript.parse_subtitles(response)
         return subtitles
 
 
-        
+    @staticmethod
+    def get_raw(file, endpoint:str=DEFAULT_ENDPOINT)->str:
+        transcript = Transcript(file=file, endpoint=endpoint)
+        response = transcript.get_transcript()
+        transcript = transcript.parse_transcript(response)
+        return transcript
         
         
