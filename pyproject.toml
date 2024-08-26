@@ -1,7 +1,7 @@
 [project]
-name = "azure-fast-transcript"
-version = "0.1.0"
-description = "Add your description here"
+name = "azure_fast_transcript"
+version = "0.1.1"
+description = "Transcript tool using Azure Speech Services fast transcript preview API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -12,3 +12,6 @@ dependencies = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[project.scripts]
+transcribe = "azure_fast_transcript:app.app"
