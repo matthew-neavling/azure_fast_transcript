@@ -5,7 +5,7 @@ Python API for the Azure AI Speech Services preview [fast transcript API](https:
 You must have an Azure AI Speech Services API key and region present in your environment
 ```sh
 # bash
-export SPEECH_REGION = "<speech_region"
+export SPEECH_REGION = "<speech_region>"
 export SPEECH_KEY = "<speech key>"
 
 # powershell
@@ -35,7 +35,7 @@ py -m azure_fast_transcript example.wav
 ```py
 from azure_fast_transcript import Transcript
 
-subtitles = Transcript.get_subtitles(**kwargs)
+subtitles = Transcript.get_subtitles("example.wav")
 
 with open("example.vtt") as vtt_file:
     for line in subtitles:
