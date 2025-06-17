@@ -5,7 +5,7 @@ import json
 
 import requests
 
-DEFAULT_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-05-15-preview"
+DEFAULT_ENDPOINT = "https://eastus.api.cognitive.microsoft.com/speechtotext/transcriptions:transcribe?api-version=2024-11-15"
 MAX_LINE_LENGTH = 25
 MAX_LINES = 2
 
