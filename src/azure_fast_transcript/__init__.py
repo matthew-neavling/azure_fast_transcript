@@ -44,18 +44,30 @@ class CaptionLine(TypedDict):
 
 
 class Transcript:
-    def __init__(self, file, endpoint: str = DEFAULT_ENDPOINT) -> None:
+    def __init__(self, file: str, endpoint: str = DEFAULT_ENDPOINT) -> None:
         """
         :param file: file to transcribe
         :param endpoint: Fast transcription API endpoint
         """
         # Init with endpoint and file
         self.endpoint = endpoint
+        """
+        Azure Fast Transcript endpoint URL
+        """
+
         self.file = file
+        """
+        Path of the file to transcribe
+        """
+
         self.transcript = {}
+        """
+        Transcription result
+        """
 
     def get_transcript(self) -> FastTranscript:
         """POST file to endpoint
+        1. Retrieve subscription key
         :returns:
         """
 
@@ -94,6 +106,12 @@ class Transcript:
         max_line_length: int = MAX_LINE_LENGTH,
         max_lines: int = MAX_LINES,
     ) -> Generator[CaptionLine, None, None]:
+        """
+        Turn a transcription result into a line generator with constraints on line length and number of lines per subtitle
+        :param words_list: source for lines
+        :param max_line_length: maximum number of words per line
+        :param max_lines: maximum number of lines per subtitle
+        """
         while len(words_list) > 0:
             candidate_words: list[Word] = []
             lines = []
@@ -117,6 +135,10 @@ class Transcript:
             yield {"start": start, "end": end, "text": text}
 
     def _time_from_milliseconds(self, milliseconds: int) -> str:
+        """
+        Convert a timestamp in milliseconds to a VTT timestamp
+        :param milliseconds: timestampt in milliseconds
+        """
         seconds = milliseconds / 1000
         microsecond = (milliseconds * 1000) % 10**6
         second = int(seconds) % 60
@@ -128,6 +150,10 @@ class Transcript:
         )
 
     def parse_subtitles(self, response: FastTranscript) -> str:
+        """
+        Turn a fast transcript result into VTT subtitles
+        :param response: JSON result from the transcription API
+        """
         enumerator = 1
 
         vtt = "WEBVTT"
@@ -160,7 +186,13 @@ class Transcript:
             return channels[0]["text"]
 
     @staticmethod
-    def get_subtitles(file, endpoint: str = DEFAULT_ENDPOINT) -> str:
+    def get_subtitles(file: str, endpoint: str = DEFAULT_ENDPOINT) -> str:
+        """
+        Submit a file to an Azure Fast Transcription api endpoint and return results as VTT
+        https://learn.microsoft.com/en-us/rest/api/speechtotext/transcriptions/transcribe?view=rest-speechtotext-2024-11-15&tabs=HTTP
+        :param file: Path to the transcription target
+        :param endpoint: default is preconfigured to the East US api
+        """
         transcript = Transcript(file=file, endpoint=endpoint)
         response = transcript.get_transcript()
         subtitles = transcript.parse_subtitles(response)
@@ -168,6 +200,12 @@ class Transcript:
 
     @staticmethod
     def get_raw(file, endpoint: str = DEFAULT_ENDPOINT) -> str:
+        """
+        Submit a file to an Azure Fast Transcription api endpoint and return results as a plaintext file
+        https://learn.microsoft.com/en-us/rest/api/speechtotext/transcriptions/transcribe?view=rest-speechtotext-2024-11-15&tabs=HTTP
+        :param file: Path to the transcription target
+        :param endpoint: default is preconfigured to the East US api
+        """
         transcript = Transcript(file=file, endpoint=endpoint)
         response = transcript.get_transcript()
         transcript = transcript.parse_transcript(response)
