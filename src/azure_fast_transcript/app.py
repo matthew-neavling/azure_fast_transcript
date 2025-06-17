@@ -4,6 +4,7 @@ import click
 from . import Transcript, DEFAULT_ENDPOINT
 # except ImportError:
 
+
 @click.command
 @click.argument("file", type=click.STRING, nargs=1)
 @click.option("--raw", is_flag=True, default=False, type=click.BOOL)
