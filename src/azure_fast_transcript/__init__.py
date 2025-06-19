@@ -78,15 +78,12 @@ class Transcript:
         }
 
         resp = requests.post(self.endpoint, headers=headers, files=files)
-
         if resp.ok:
-            data = resp.json()
+            return resp.json()
         else:
             raise Exception(
                 f"Response type invalid:\nCode:\t{resp.status_code}\nMsg:\t{resp.content}"
             )
-
-        return data
 
     def _get_line(
         self,
