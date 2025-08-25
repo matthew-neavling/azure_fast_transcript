@@ -5,8 +5,8 @@ Python CLI for the Azure AI Speech Services [fast transcript API](https://learn.
 You must have an Azure AI Speech Services API key and region present in your environment
 ```sh
 # bash
-export SPEECH_REGION = "<speech_region>"
-export SPEECH_KEY = "<speech key>"
+export SPEECH_REGION="<speech_region>"
+export SPEECH_KEY="<speech key>"
 
 # powershell
 $env:SPEECH_REGION = "<speech region>"
@@ -29,7 +29,7 @@ pip install git+https://github.com/matthew-neavling/azure_fast_transcript.git
 ```sh
 py -m azure_fast_transcript example.wav # Return VTT subtitles with default parameters
 py -m azure_fast_transcript --raw example.wav # Return raw transcript
-py -m azure_fast_transcript -p Masked example.wav # Retrun VTT subtitles with profanity masked with asterisks
+py -m azure_fast_transcript -p Masked example.wav # Return VTT subtitles with profanity masked with asterisks
 ```
 
 ## Programmatic
